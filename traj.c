@@ -13,12 +13,12 @@ getcircles(Choreop cp, Circle *cl, Circle *cr)
 	cl->p.x = cp.p.x - cp.r*sin(cp.ori);
 	cl->p.y = cp.p.y + cp.r*cos(cp.ori);
 	cl->r = cp.r;
-	cl->toleft = 1;
+	cl->acw = 1;
 
 	cr->p.x = cp.p.x + cp.r*sin(cp.ori);
 	cr->p.y = cp.p.y - cp.r*cos(cp.ori);
 	cr->r = cp.r;
-	cr->toleft = -1;
+	cr->acw = -1;
 }
 
 /* get the right tangent points with the orientation*/
@@ -42,38 +42,38 @@ gettan(Tan *rett, Circle c1, Circle c2)
 	} else if (c1.r < c2.r) {
 		invert = 1;
 		c = c2;
-		c.toleft *= -1;
+		c.acw *= -1;
 		d = c1;
-		d.toleft *= -1;
+		d.acw *= -1;
 	} else {
 		c = c1;
 		d = c2;
 	}
 
-	h.x = (c.r*d.p.x - c.toleft*d.toleft*d.r*c.p.x) /
-		(c.r - c.toleft*d.toleft*d.r);
-	h.y = (c.r*d.p.y - c.toleft*d.toleft*d.r*c.p.y) /
-		(c.r - c.toleft*d.toleft*d.r);
+	h.x = (c.r*d.p.x - c.acw*d.acw*d.r*c.p.x) /
+		(c.r - c.acw*d.acw*d.r);
+	h.y = (c.r*d.p.y - c.acw*d.acw*d.r*c.p.y) /
+		(c.r - c.acw*d.acw*d.r);
 
 	d1 = (h.x - c.p.x)*(h.x - c.p.x) + (h.y - c.p.y)*(h.y - c.p.y);
 	d2 = (h.x - d.p.x)*(h.x - d.p.x) + (h.y - d.p.y)*(h.y - d.p.y);
 
 	p.x = c.p.x + (c.r*c.r*(h.x-c.p.x) +
-		c.toleft*c.r*(h.y-c.p.y)*sqrt(d1-c.r*c.r)) / d1;
+		c.acw*c.r*(h.y-c.p.y)*sqrt(d1-c.r*c.r)) / d1;
 	p.y = c.p.y + (c.r*c.r*(h.y-c.p.y) -
-		c.toleft*c.r*(h.x-c.p.x)*sqrt(d1-c.r*c.r)) / d1;
+		c.acw*c.r*(h.x-c.p.x)*sqrt(d1-c.r*c.r)) / d1;
 
 	q.x = d.p.x + (d.r*d.r*(h.x-d.p.x) +
-		c.toleft*d.r*(h.y-d.p.y)*sqrt(d2-d.r*d.r)) / d2;
+		c.acw*d.r*(h.y-d.p.y)*sqrt(d2-d.r*d.r)) / d2;
 	q.y = d.p.y + (d.r*d.r*(h.y-d.p.y) -
-		c.toleft*d.r*(h.x-d.p.x)*sqrt(d2-d.r*d.r)) / d2;
+		c.acw*d.r*(h.x-d.p.x)*sqrt(d2-d.r*d.r)) / d2;
 
 	if (invert == 0) {
-		rett->p1 = p;
-		rett->p2 = q;
+		rett->dep = p;
+		rett->dest = q;
 	} else {
-		rett->p1 = q;
-		rett->p2 = p;
+		rett->dep = q;
+		rett->dest = p;
 	}
 }
 
@@ -94,14 +94,14 @@ getshortesttan(Tan *rett, Choreop cp1, Choreop cp2)
 	gettan(&trl, c1r, c2l);
 	gettan(&trr, c1r, c2r);
 
-	len[0] = (tll.p1.x-tll.p2.x)*(tll.p1.x-tll.p2.x) +
-		(tll.p1.y-tll.p2.y)*(tll.p1.y-tll.p2.y);
-	len[1] = (tlr.p1.x-tlr.p2.x)*(tlr.p1.x-tlr.p2.x) +
-		(tlr.p1.y-tlr.p2.y)*(tlr.p1.y-tlr.p2.y);
-	len[2] = (trl.p1.x-trl.p2.x)*(trl.p1.x-trl.p2.x) +
-		(trl.p1.y-trl.p2.y)*(trl.p1.y-trl.p2.y);
-	len[3] = (trr.p1.x-trr.p2.x)*(trr.p1.x-trr.p2.x) +
-		(trr.p1.y-trr.p2.y)*(trr.p1.y-trr.p2.y);
+	len[0] = (tll.dep.x-tll.dest.x)*(tll.dep.x-tll.dest.x) +
+		(tll.dep.y-tll.dest.y)*(tll.dep.y-tll.dest.y);
+	len[1] = (tlr.dep.x-tlr.dest.x)*(tlr.dep.x-tlr.dest.x) +
+		(tlr.dep.y-tlr.dest.y)*(tlr.dep.y-tlr.dest.y);
+	len[2] = (trl.dep.x-trl.dest.x)*(trl.dep.x-trl.dest.x) +
+		(trl.dep.y-trl.dest.y)*(trl.dep.y-trl.dest.y);
+	len[3] = (trr.dep.x-trr.dest.x)*(trr.dep.x-trr.dest.x) +
+		(trr.dep.y-trr.dest.y)*(trr.dep.y-trr.dest.y);
 
 	imin = 0;
 	for (i = 1; i < 4; i++)
@@ -110,36 +110,36 @@ getshortesttan(Tan *rett, Choreop cp1, Choreop cp2)
 
 	switch (imin) {
 	case 0:
-		rett->p1.x = tll.p1.x;
-		rett->p1.y = tll.p1.y;
-		rett->toleft1 = 1;
-		rett->p2.x = tll.p2.x;
-		rett->p2.y = tll.p2.y;
-		rett->toleft2 = 1;
+		rett->dep.x = tll.dep.x;
+		rett->dep.y = tll.dep.y;
+		rett->depacw = 1;
+		rett->dest.x = tll.dest.x;
+		rett->dest.y = tll.dest.y;
+		rett->destacw = 1;
 		break;
 	case 1:
-		rett->p1.x = tlr.p1.x;
-		rett->p1.y = tlr.p1.y;
-		rett->toleft1 = 1;
-		rett->p2.x = tlr.p2.x;
-		rett->p2.y = tlr.p2.y;
-		rett->toleft2 = -1;
+		rett->dep.x = tlr.dep.x;
+		rett->dep.y = tlr.dep.y;
+		rett->depacw = 1;
+		rett->dest.x = tlr.dest.x;
+		rett->dest.y = tlr.dest.y;
+		rett->destacw = -1;
 		break;
 	case 2:
-		rett->p1.x = trl.p1.x;
-		rett->p1.y = trl.p1.y;
-		rett->toleft1 = -1;
-		rett->p2.x = trl.p2.x;
-		rett->p2.y = trl.p2.y;
-		rett->toleft2 = 1;
+		rett->dep.x = trl.dep.x;
+		rett->dep.y = trl.dep.y;
+		rett->depacw = -1;
+		rett->dest.x = trl.dest.x;
+		rett->dest.y = trl.dest.y;
+		rett->destacw = 1;
 		break;
 	case 3:
-		rett->p1.x = trr.p1.x;
-		rett->p1.y = trr.p1.y;
-		rett->toleft1 = -1;
-		rett->p2.x = trr.p2.x;
-		rett->p2.y = trr.p2.y;
-		rett->toleft2 = -1;
+		rett->dep.x = trr.dep.x;
+		rett->dep.y = trr.dep.y;
+		rett->depacw = -1;
+		rett->dest.x = trr.dest.x;
+		rett->dest.y = trr.dest.y;
+		rett->destacw = -1;
 		break;
 	}
 }

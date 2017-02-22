@@ -30,20 +30,20 @@ main(void)
 				&cp1.p.x, &cp1.p.y, &cp1.ori, &cp1.r);
 			getcircles(cp1, &c1, &c2);
 			printf("cl: (%d,%d), %d, %d\n",
-				c1.p.x, c1.p.y, c1.r, c1.toleft);
+				c1.p.x, c1.p.y, c1.r, c1.acw);
 			printf("cr: (%d,%d), %d, %d\n",
-				c2.p.x, c2.p.y, c2.r, c2.toleft);
+				c2.p.x, c2.p.y, c2.r, c2.acw);
 			break;
 		case 't':
-			printf("c1: x y r toleft: ");
+			printf("c1: x y r acw: ");
 			scanf("%d %d %d %d",
-				&c1.p.x, &c1.p.y, &c1.r, &c1.toleft);
-			printf("c2: x y r toleft: ");
+				&c1.p.x, &c1.p.y, &c1.r, &c1.acw);
+			printf("c2: x y r acw: ");
 			scanf("%d %d %d %d",
-				&c2.p.x, &c2.p.y, &c2.r, &c2.toleft);
+				&c2.p.x, &c2.p.y, &c2.r, &c2.acw);
 			gettan(&t, c1, c2);
 			printf("t1:(%d,%d), t2(%d,%d)\n",
-				t.p1.x, t.p1.y, t.p2.x, t.p2.y);
+				t.dep.x, t.dep.y, t.dest.x, t.dest.y);
 			break;
 		case 's':
 			printf("cp1: x y ori r: ");
@@ -53,8 +53,8 @@ main(void)
 			scanf("%d %d %f %d",
 				&cp2.p.x, &cp2.p.y, &cp2.ori, &cp2.r);
 			getshortesttan(&t, cp1, cp2);
-			printf("t1:(%d,%d), %d ", t.p1.x, t.p1.y, t.toleft1);
-			printf("t2:(%d,%d), %d\n", t.p2.x, t.p2.y, t.toleft2);
+			printf("t1:(%d,%d), %d ", t.dep.x, t.dep.y, t.depacw);
+			printf("t2:(%d,%d), %d\n", t.dest.x, t.dest.y, t.destacw);
 			break;
 		case 'a':
 			printf("cp: x y r: ");

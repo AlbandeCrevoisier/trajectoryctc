@@ -8,12 +8,14 @@ typedef struct {
 	int y;
 } Point;
 
-/* Tangent */
+/* Tangent
+ * acw: anticlockwise ? 1 : -1
+ */
 typedef struct {
-	Point p1;
-	int toleft1;
-	Point p2;
-	int toleft2;
+	Point dep;
+	int depacw;
+	Point dest;
+	int destacw;
 } Tan;
 
 /* Point of the choreography, with orientation and radius */
@@ -26,7 +28,7 @@ typedef struct {
 typedef struct {
 	Point p;
 	int r;
-	int toleft;
+	int acw;
 } Circle;
 
 void	getcircles(Choreop cp, Circle *cl, Circle *cr);
