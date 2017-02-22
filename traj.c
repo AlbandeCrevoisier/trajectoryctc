@@ -10,13 +10,13 @@
 void
 getcircles(Choreop cp, Circle *cl, Circle *cr)
 {
-	cl->p.x = cp.p.x - cp.r*msin(cp.ori);
-	cl->p.y = cp.p.y + cp.r*mcos(cp.ori);
+	cl->p.x = cp.p.x - cp.r*sin(cp.ori);
+	cl->p.y = cp.p.y + cp.r*cos(cp.ori);
 	cl->r = cp.r;
 	cl->toleft = 1;
 
-	cr->p.x = cp.p.x + cp.r*msin(cp.ori);
-	cr->p.y = cp.p.y - cp.r*mcos(cp.ori);
+	cr->p.x = cp.p.x + cp.r*sin(cp.ori);
+	cr->p.y = cp.p.y - cp.r*cos(cp.ori);
 	cr->r = cp.r;
 	cr->toleft = -1;
 }
@@ -161,5 +161,5 @@ getshortesttan(Choreop cp1, Choreop cp2)
 
 	d = sqrt((cp.p.x-p.x)*(cp.p.x-p.x) + (cp.p.x-p.x)*(cp.p.x-p.x));
 
-	return 2*masin(d / (2.0 * cp.r));
+	return 2*asin(d / (2.0 * cp.r));
 }

@@ -1,7 +1,6 @@
 #ifndef TRAJ_H
 #define TRAJ_H
 
-#include "trigo.h"
 #include <math.h>
 
 typedef struct {
