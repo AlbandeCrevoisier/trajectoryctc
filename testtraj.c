@@ -41,7 +41,7 @@ main(void)
 			printf("c2: x y r toleft: ");
 			scanf("%d %d %d %d",
 				&c2.p.x, &c2.p.y, &c2.r, &c2.toleft);
-			t = gettan(c1, c2);
+			gettan(&t, c1, c2);
 			printf("t1:(%d,%d), t2(%d,%d)\n",
 				t.p1.x, t.p1.y, t.p2.x, t.p2.y);
 			break;
@@ -52,7 +52,7 @@ main(void)
 			printf("cp2: x y ori r: ");
 			scanf("%d %d %f %d",
 				&cp2.p.x, &cp2.p.y, &cp2.ori, &cp2.r);
-			t = getshortesttan(cp1, cp2);
+			getshortesttan(&t, cp1, cp2);
 			printf("t1:(%d,%d), %d ", t.p1.x, t.p1.y, t.toleft1);
 			printf("t2:(%d,%d), %d\n", t.p2.x, t.p2.y, t.toleft2);
 			break;

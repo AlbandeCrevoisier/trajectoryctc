@@ -6,7 +6,7 @@
 
 #include "traj.h"
 
-/* getute circles of radius r to the left and right of the oriented point */
+/* get circles of radius r to the left and right of the oriented point */
 void
 getcircles(Choreop cp, Circle *cl, Circle *cr)
 {
@@ -22,10 +22,9 @@ getcircles(Choreop cp, Circle *cl, Circle *cr)
 }
 
 /* get the right tangent points with the orientation*/
-Tan
-gettan(Circle c1, Circle c2)
+void
+gettan(Tan *rett, Circle c1, Circle c2)
 {
-	Tan rett;
 	int d1; /* distance h - c1 */
 	int d2; /* distance h - c2 */
 	Point h; /* homothetic center */
@@ -70,21 +69,18 @@ gettan(Circle c1, Circle c2)
 		c.toleft*d.r*(h.x-d.p.x)*sqrt(d2-d.r*d.r)) / d2;
 
 	if (invert == 0) {
-		rett.p1 = p;
-		rett.p2 = q;
+		rett->p1 = p;
+		rett->p2 = q;
 	} else {
-		rett.p1 = q;
-		rett.p2 = p;
+		rett->p1 = q;
+		rett->p2 = p;
 	}
-
-	return rett;
 }
 
-/* getute the shortest tangent */
-Tan
-getshortesttan(Choreop cp1, Choreop cp2)
+/* get the shortest tangent */
+void
+getshortesttan(Tan *rett, Choreop cp1, Choreop cp2)
 {
-	Tan rett;
 	int i, imin;
 	int len[4];
 	Tan tll, tlr, trl, trr;
@@ -93,10 +89,10 @@ getshortesttan(Choreop cp1, Choreop cp2)
 	getcircles(cp1, &c1l, &c1r);
 	getcircles(cp2, &c2l, &c2r);
 
-	tll = gettan(c1l, c2l);
-	tlr = gettan(c1l, c2r);
-	trl = gettan(c1r, c2l);
-	trr = gettan(c1r, c2r);
+	gettan(&tll, c1l, c2l);
+	gettan(&tlr, c1l, c2r);
+	gettan(&trl, c1r, c2l);
+	gettan(&trr, c1r, c2r);
 
 	len[0] = (tll.p1.x-tll.p2.x)*(tll.p1.x-tll.p2.x) +
 		(tll.p1.y-tll.p2.y)*(tll.p1.y-tll.p2.y);
@@ -114,44 +110,42 @@ getshortesttan(Choreop cp1, Choreop cp2)
 
 	switch (imin) {
 	case 0:
-		rett.p1.x = tll.p1.x;
-		rett.p1.y = tll.p1.y;
-		rett.toleft1 = 1;
-		rett.p2.x = tll.p2.x;
-		rett.p2.y = tll.p2.y;
-		rett.toleft2 = 1;
+		rett->p1.x = tll.p1.x;
+		rett->p1.y = tll.p1.y;
+		rett->toleft1 = 1;
+		rett->p2.x = tll.p2.x;
+		rett->p2.y = tll.p2.y;
+		rett->toleft2 = 1;
 		break;
 	case 1:
-		rett.p1.x = tlr.p1.x;
-		rett.p1.y = tlr.p1.y;
-		rett.toleft1 = 1;
-		rett.p2.x = tlr.p2.x;
-		rett.p2.y = tlr.p2.y;
-		rett.toleft2 = -1;
+		rett->p1.x = tlr.p1.x;
+		rett->p1.y = tlr.p1.y;
+		rett->toleft1 = 1;
+		rett->p2.x = tlr.p2.x;
+		rett->p2.y = tlr.p2.y;
+		rett->toleft2 = -1;
 		break;
 	case 2:
-		rett.p1.x = trl.p1.x;
-		rett.p1.y = trl.p1.y;
-		rett.toleft1 = -1;
-		rett.p2.x = trl.p2.x;
-		rett.p2.y = trl.p2.y;
-		rett.toleft2 = 1;
+		rett->p1.x = trl.p1.x;
+		rett->p1.y = trl.p1.y;
+		rett->toleft1 = -1;
+		rett->p2.x = trl.p2.x;
+		rett->p2.y = trl.p2.y;
+		rett->toleft2 = 1;
 		break;
 	case 3:
-		rett.p1.x = trr.p1.x;
-		rett.p1.y = trr.p1.y;
-		rett.toleft1 = -1;
-		rett.p2.x = trr.p2.x;
-		rett.p2.y = trr.p2.y;
-		rett.toleft2 = -1;
+		rett->p1.x = trr.p1.x;
+		rett->p1.y = trr.p1.y;
+		rett->toleft1 = -1;
+		rett->p2.x = trr.p2.x;
+		rett->p2.y = trr.p2.y;
+		rett->toleft2 = -1;
 		break;
 	}
-
-	return rett;
 }
 
-/* Return the angle of the arc of the circle between cp1 and cp2.
- * The radius is given by cp1.
+/* Return the angle of the arc of the circle between cp and p.
+ * The radius is given by cp.
  * Note that the angle is not oriented
  */
  float
@@ -159,7 +153,7 @@ getshortesttan(Choreop cp1, Choreop cp2)
  {
  	int d;
 
-	d = sqrt((cp.p.x-p.x)*(cp.p.x-p.x) + (cp.p.x-p.x)*(cp.p.x-p.x));
+	d = sqrt((cp.p.x-p.x)*(cp.p.x-p.x) + (cp.p.y-p.y)*(cp.p.y-p.y));
 
 	return 2*asin(d / (2.0 * cp.r));
 }

@@ -30,8 +30,8 @@ typedef struct {
 } Circle;
 
 void	getcircles(Choreop cp, Circle *cl, Circle *cr);
-Tan	gettan(Circle c1, Circle c2);
-Tan	getshortesttan(Choreop cp1, Choreop cp2);
+void	gettan(Tan *rett, Circle c1, Circle c2);
+void	getshortesttan(Tan *rett, Choreop cp1, Choreop cp2);
 float	getangle(Choreop cp, Point p);
 
 #endif /* TRAJ_H */
