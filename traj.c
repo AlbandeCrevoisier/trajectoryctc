@@ -21,7 +21,7 @@ getcircles(Choreop cp, Circle *cl, Circle *cr)
 	cr->acw = -1;
 }
 
-/* get the right tangent points with the orientation*/
+/* get the right tangent points with the orientation */
 void
 gettan(Tan *rett, Circle c1, Circle c2)
 {
