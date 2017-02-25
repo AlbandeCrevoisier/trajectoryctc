@@ -1,8 +1,39 @@
 /* Algorithm: get the trajectory.
- * The robot first follows an arc of a circle of given radius, the a straight
+ * The robot first follows an arc of a circle of given radius, then a straight
  * line, and finally another arc of a circle to achieve the demanded
  * orientation.
  */
+
+typedef struct {
+	int x;
+	int y;
+} Point;
+
+/* Tangent
+ * acw: anticlockwise ? 1 : -1
+ */
+typedef struct {
+	Point dep;
+	int depacw;
+	Point dest;
+	int destacw;
+} Tan;
+
+/* Point of the choreography, with orientation and radius */
+typedef struct {
+	Point p;
+	float ori;
+	int r;
+} Choreop;
+
+typedef struct {
+	Point p;
+	int r;
+	int acw;
+} Circle;
+
+void	getcircles(Choreop cp, Circle *cl, Circle *cr);
+void	gettan(Tan *rett, Circle c1, Circle c2);
 
 #include "traj.h"
 
